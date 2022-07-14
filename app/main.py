@@ -1,7 +1,5 @@
 
 import random
-import token
-from turtle import update
 from typing import List
 import numpy as np
 from fastapi import Depends, FastAPI, Path
