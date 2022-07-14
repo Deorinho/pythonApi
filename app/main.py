@@ -27,7 +27,7 @@ async def login(token: str = Depends(oauth_scheme)):
 class User(BaseModel):
     user_id : str = input('Please Enter A Name: ')
     user_age : int = int(input('Please Enter An Age: '))
-    user_score : list[float] =[random.random()* 10, random.random()* 10, random.random()* 10, random.random()* 10, random.random()* 10 ] 
+    user_score : List[float] =[random.random()* 10, random.random()* 10, random.random()* 10, random.random()* 10, random.random()* 10 ] 
 
 @app.get("/")
 def root():
