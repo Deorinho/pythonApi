@@ -1,4 +1,5 @@
 from datetime import datetime
+import string
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
@@ -80,22 +81,30 @@ async def create_user(user: User, db : Session = Depends(get_db)):
 
 
 #reads/updates the User
-@app.put("/{}")
-async def update_user():
-    counter = 0
+@app.put("/{email}")
+async def update_user(email: string, user: User, db : Session = Depends(get_db)):
+    user_model = db.query(models.User).filter(models.User.email == email).first()
+    
+    #guard clause that makes checking if an item is none or null easier
+    if user_model is None:
+        raise HTTPException(
+            status_code = 404,
+            detail = f"USER {email} : Does not Exist")
+    
+    
+    user_model = models.User()
+    user_model.email = User.email
+    user_model.passwd = User.passwd
+    user_model.signup_ts = User.signup_ts
 
-    for x in userdb:
-        counter+=1
-        if x.email == User.email:
-            User.append()
-            return userdb[counter - 1]
-    raise HTTPException(
-        status_code = 404,
-        detail = f"USER {User.email} : Does not Exist")
+    db.add(user_model)
+    db.commit()
 
+    return User
 
-# @app.delete("/")
-# async def delete_user():
+@app.delete("/{email}")
+async def delete_user(email:string,):
+    return 0
 
 # #an endpoint where given the user id, will return data associted with the user - problem here is that I am unable to get the info on a given user_id
 # @app.get("/users/{user_id}")
