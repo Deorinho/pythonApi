@@ -53,7 +53,8 @@ userdb = []
 
 # basemodel that specifies the parameters of User with the user id , age and the list of floating point numbers as scores
 class User(BaseModel):
-    user : EmailStr 
+    id     : int 
+    user   : EmailStr 
     passwd : str = Field(min_length=1, max_length = 15)
     signup_ts: Optional[datetime] = None
 
@@ -79,7 +80,7 @@ async def create_user(user: User, db : Session = Depends(get_db)):
 
 
 #reads/updates the User
-@app.put("/{email}")
+@app.put("/{}")
 async def update_user():
     counter = 0
 
