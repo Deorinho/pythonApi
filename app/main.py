@@ -100,11 +100,29 @@ async def update_user(email: string, user: User, db : Session = Depends(get_db))
     db.add(user_model)
     db.commit()
 
-    return User
+    return user
 
 @app.delete("/{email}")
-async def delete_user(email:string,):
-    return 0
+async def delete_user(email:string,user: User, db: Session = Depends(get_db)):
+    user_model = db.query(models.User).filter(models.User.email == email).first()
+    if user_model is None:
+        raise HTTPException(
+            status_code = 404,
+            detail = f"USER {email} : Does not Exist")
+    
+
+    user_model = models.User()
+    user_model.email = User.email
+    user_model.passwd = User.passwd
+    user_model.signup_ts = User.signup_ts
+
+    db.add(user_model)
+    db.commit()
+
+    return user
+
+
+
 
 # #an endpoint where given the user id, will return data associted with the user - problem here is that I am unable to get the info on a given user_id
 # @app.get("/users/{user_id}")
